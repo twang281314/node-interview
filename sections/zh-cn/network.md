@@ -49,7 +49,7 @@
 
 ### 可靠传输
 
-为每一个发送的数据包分配一个序列号(SYN, Synchronise packet), 每一个包在对方收到后要返回一个对应的应答数据包(ACK, Acknowledgedgement),. 发送方如果发现某个包没有被对方 ACK, 则会选择重发. 接收方通过 SYN 序号来保证数据的不会乱序(reordering), 发送方通过 ACK 来保证数据不缺漏, 以此参考决定是否重传. 关于具体的序号计算, 丢包时的重传机制等可以参见阅读陈皓的 [《TCP的那些事儿（上）》](http://coolshell.cn/articles/11564.html) 此处不做赘述.
+为每一个发送的数据包分配一个序列号(SYN, Synchronize packet), 每一个包在对方收到后要返回一个对应的应答数据包(ACK, Acknowledgement),. 发送方如果发现某个包没有被对方 ACK, 则会选择重发. 接收方通过 SYN 序号来保证数据的不会乱序(reordering), 发送方通过 ACK 来保证数据不缺漏, 以此参考决定是否重传. 关于具体的序号计算, 丢包时的重传机制等可以参见阅读陈皓的 [《TCP的那些事儿（上）》](http://coolshell.cn/articles/11564.html) 此处不做赘述.
 
 ### window
 
@@ -133,7 +133,7 @@ UDP socket 支持 n 对 m 的连接状态, 在[官方文档](https://nodejs.org/
 
 ## HTTP
 
-目前世界上运行最良好的分布式集群, 莫过于当前的万维网了 (http servers) 了. 目前前端工程师也都是靠 HTTP 协议吃饭的, 所以 2-3 年的前端同学都应该对 HTTP 有比较深的理解了, 所以这里不做太多的赘述. 推荐书籍[《图解HTTP》](https://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00JTQK1L4/), 博客[HTTP 协议入门](http://www.ruanyifeng.com/blog/2016/08/http.html).
+目前世界上运行最良好的分布式集群, 莫过于当前的万维网 (http servers) 了. 目前前端工程师也都是靠 HTTP 协议吃饭的, 所以 2-3 年的前端同学都应该对 HTTP 有比较深的理解了, 所以这里不做太多的赘述. 推荐书籍[《图解HTTP》](https://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00JTQK1L4/), 博客[HTTP 协议入门](http://www.ruanyifeng.com/blog/2016/08/http.html).
 
 另外最近几年开始大家对 HTTP 的面试的考察也渐渐偏向[理解 RESTful 架构](http://www.ruanyifeng.com/blog/2011/09/restful.html). 简单的说, RESTful 是把每个 URI 当做资源 (Resources), 通过 method 作为动词来对资源做不同的动作, 然后服务器返回 status 来得知资源状态的变化 (State Transfer);
 
@@ -155,7 +155,7 @@ methods|CRUD|幂等|缓存
 GET|Read|✓|✓
 POST|Create||
 PUT|Update/Replace|✓
-PATCH|Update/Modify|✓
+PATCH|Update/Modify||
 DELETE|Delete|✓
 
 > GET 和 POST 有什么区别?
@@ -182,7 +182,7 @@ HTTP headers 是在进行 HTTP 请求的交互过程中互相支会对方一些�
 
 > <a name="q-cors"></a> 什么是跨域请求? 如何允许跨域?
 
-出于安全考虑, 默认情况下使用 XMLHttpRequest 和 Fetch 发起 HTTP 请求必须遵守同源策略, 即只能向相同域名请求. 向不同域名的请求被称作跨域请求 (cross-origin HTTP request). 可以通过设置 [CORS headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS) 即 `Access-Control-Allow-` 系列来允许跨域. 例如:
+出于安全考虑, 默认情况下使用 XMLHttpRequest 和 Fetch 发起 HTTP 请求必须遵守同源策略, 即只能向相同 host 请求 (host = hostname : port) 注[1]. 向不同 host 的请求被称作跨域请求 (cross-origin HTTP request). 可以通过设置 [CORS headers](https://developer.mozilla.org/en-US/docs/Glossary/CORS) 即 `Access-Control-Allow-` 系列来允许跨域. 例如:
 
 ```
 location ~* ^/(?:v1|_) {
@@ -197,6 +197,8 @@ location ~* ^/(?:v1|_) {
 }
 ```
 
+注[1]：同源除了相同 host 也包括相同协议. 所以即使 host 相同, 从 HTTP 到 HTTPS 也属于跨域, 见[讨论](https://github.com/ElemeFE/node-interview/issues/55).
+
 > `Script error.` 是什么错误? 如何拿到更详细的信息?
 
 接上题, 由于同源性策略 (CORS), 如果你引用的 js 脚本所在的域与当前域不同, 那么浏览器会把 onError 中的 msg 替换为 `Script error.` 要拿到详细错误的方法, 处理配好 `Access-Control-Allow-Origin` 还有在引用脚本的时候指定 `crossorigin` 例如:
@@ -205,7 +207,7 @@ location ~* ^/(?:v1|_) {
 <script src="http://another-domain.com/app.js" crossorigin="anonymous"></script>
 ```
 
-详见 [Javascript Script Error.](https://sentry.io/answers/javascript-script-error/)
+详见 [JavaScript Script Error.](https://sentry.io/answers/javascript-script-error/)
 
 
 ### Agent
@@ -297,9 +299,9 @@ DNS 服务主要基于 UDP, 这里简单介绍 Node.js 实现的接口中的两�
 
 > hosts 文件是什么? 什么叫 DNS 本地解析?
 
-hosts 文件是个没有扩展名的系统文件，其作用就是将网址域名与其对应的 IP 地址建立一个关联“数据库”，当用户在浏览器中输入一个需要登录的网址时，系统会首先自动从 hosts 文件中寻找对应的IP地址。  
+hosts 文件是个没有扩展名的系统文件, 其作用就是将网址域名与其对应的 IP 地址建立一个关联“数据库”, 当用户在浏览器中输入一个需要登录的网址时, 系统会首先自动从 hosts 文件中寻找对应的IP地址. 
 
-当我们访问一个域名时，实际上需要的是访问对应的 IP 地址。这时候，获取 IP 地址的方式，先是读取浏览器缓存，如果未命中 => 接着读取本地 hosts 文件，如果还是未命中 => 则向 DNS 服务器发送请求获取。在向 DNS 服务器获取 IP 地址之前的行为，叫做 DNS 本地解析。
+当我们访问一个域名时, 实际上需要的是访问对应的 IP 地址. 这时候, 获取 IP 地址的方式, 先是读取浏览器缓存, 如果未命中 => 接着读取本地 hosts 文件, 如果还是未命中 => 则向 DNS 服务器发送请求获取. 在向 DNS 服务器获取 IP 地址之前的行为, 叫做 DNS 本地解析.
 
 ## ZLIB
 

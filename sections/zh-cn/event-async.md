@@ -14,7 +14,7 @@
 
 ![callback-hell](/assets/callback-hell.jpg)
 
-相信很多同学在面试的时候都碰到过这样一个问题, `如何处理 Callback Hell`. 在早些年的时候, 大家会看到有很多的解决方案例如 [Q](https://www.npmjs.com/package/q), [async](https://www.npmjs.com/package/async), [EventProxy](https://www.npmjs.com/package/eventproxy) 等等. 最后从流行程度来看 `Promise` 当之无愧的独领风骚, 并且是在 ES6 的 Javascript 标准上赢得了支持.
+相信很多同学在面试的时候都碰到过这样一个问题, `如何处理 Callback Hell`. 在早些年的时候, 大家会看到有很多的解决方案例如 [Q](https://www.npmjs.com/package/q), [async](https://www.npmjs.com/package/async), [EventProxy](https://www.npmjs.com/package/eventproxy) 等等. 最后从流行程度来看 `Promise` 当之无愧的独领风骚, 并且是在 ES6 的 JavaScript 标准上赢得了支持.
 
 关于它的基础知识/概念推荐看阮一峰的 [Promise 对象](http://javascript.ruanyifeng.com/advanced/promise.html#toc9) 这里就不多不赘述.
 
@@ -208,7 +208,7 @@ function sleep(ms) {
    └───────────────────────┘
 ```
 
-关于事件循环, Timers 以及 nextTick 的关系详见官方文档 [The Node.js Event Loop, Timers, and process.nextTick() (英文)](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/) 以及阮一峰的 [JavaScript 运行机制详解：再谈Event Loop (中文)](http://www.ruanyifeng.com/blog/2014/10/event-loop.html) 等.
+关于事件循环, Timers 以及 nextTick 的关系详见官方文档 The Node.js Event Loop, Timers, and process.nextTick(): [英文](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/)， [论坛中文讨论](https://cnodejs.org/topic/57d68794cb6f605d360105bf) 以及 [Tasks, microtasks, queues and schedules](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/)
 
 ## 并行/并发
 
@@ -222,6 +222,6 @@ function sleep(ms) {
 
 并行 (Parallel) = 2 队列对应 2 咖啡机.
 
-Node.js 通过事件循环来挨个抽取实践队列中的一个个 Task 执行, 从而避免了传统的多线程情况下 `2个队列对应 1个咖啡机` 的时候上线文切换以及资源争抢/同步的问题, 所以获得了高并发的成就.
+Node.js 通过事件循环来挨个抽取事件队列中的一个个 Task 执行, 从而避免了传统的多线程情况下 `2个队列对应 1个咖啡机` 的时候上线文切换以及资源争抢/同步的问题, 所以获得了高并发的成就.
 
 至于在 node 中并行, 你可以通过 cluster 来再添加一个咖啡机.
