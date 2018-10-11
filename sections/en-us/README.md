@@ -1,4 +1,4 @@
-![ElemeFE-background](/assets/ElemeFE-background.png)
+![ElemeFE-background](../../assets/ElemeFE-background.png)
 
 ## Guide
 
@@ -15,7 +15,7 @@
 
 **Common Problem**
 
-[View more](/sections/en-us/js-basic.md)
+[View more](/sections/en-us/common.md)
 
 ## [Module](/sections/en-us/module.md)
 
